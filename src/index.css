@@ -1,0 +1,373 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&family=Press+Start+2P&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Share Tech Mono", "JetBrains Mono", monospace;
+  --font-digital: "VT323", monospace;
+  --font-pixel: "Press Start 2P", monospace;
+}
+
+/* Winamp Classic custom styles */
+.winamp-textured {
+  background: #1c1c1f;
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+    radial-gradient(circle at 50% 50%, #2a2a30, #141416);
+  background-size: 4px 4px, 4px 4px, 100% 100%;
+}
+
+.winamp-metal {
+  background: linear-gradient(180deg, #2e2e46 0%, #232338 50%, #1a1a2e 100%);
+  border-top: 1px solid #585878;
+  border-left: 1px solid #585878;
+  border-right: 1px solid #0e0e18;
+  border-bottom: 1px solid #0e0e18;
+}
+
+.winamp-lcd {
+  background-color: #000000;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.9), 0 1px 0 rgba(255,255,255,0.08);
+}
+
+.winamp-border-inset {
+  border-top: 2px solid #000;
+  border-left: 2px solid #000;
+  border-right: 2px solid #555568;
+  border-bottom: 2px solid #555568;
+}
+
+.winamp-border-outset {
+  border-top: 2px solid #585878;
+  border-left: 2px solid #585878;
+  border-right: 2px solid #14141e;
+  border-bottom: 2px solid #2c2d40;
+  box-shadow: 0 1px 0 #3e4056, 0 4px 14px rgba(0, 0, 0, 0.75);
+}
+
+/* Classic Winamp Titlebar with Dual Brass Lines */
+.winamp-titlebar-classic {
+  background: linear-gradient(180deg, #242438 0%, #32324e 45%, #1c1c2e 100%);
+  border-top: 1px solid #2e2e46;
+  border-bottom: 1px solid #101018;
+  position: relative;
+}
+
+.winamp-titlebar-stripes {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    #a89658 2px,
+    #c8b874 3px,
+    transparent 4px
+  );
+}
+
+/* Authentic Winamp Silver Beveled Button */
+.winamp-btn-silver {
+  background: linear-gradient(180deg, #e2e4ee 0%, #bcbecb 48%, #8e909e 100%);
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #181920;
+  border-bottom: 1px solid #181920;
+  color: #111116;
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
+  font-family: inherit;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.winamp-btn-silver:hover {
+  background: linear-gradient(180deg, #f0f2fa 0%, #cbccd8 48%, #9ea0b0 100%);
+}
+
+.winamp-btn-silver:active, .winamp-btn-silver-active {
+  background: linear-gradient(180deg, #747684 0%, #8e909e 55%, #aaacba 100%) !important;
+  border-top: 1px solid #101016 !important;
+  border-left: 1px solid #101016 !important;
+  border-right: 1px solid #ffffff !important;
+  border-bottom: 1px solid #ffffff !important;
+  color: #000000 !important;
+  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.75) !important;
+}
+
+/* Winamp Green & Orange Slider Grooves */
+.winamp-groove-orange {
+  background: linear-gradient(180deg, #ff3c00 0%, #ff8800 50%, #ff4400 100%);
+  box-shadow: inset 0 0 2px rgba(0,0,0,0.8);
+}
+
+.winamp-groove-green {
+  background: linear-gradient(180deg, #00d000 0%, #44ff44 50%, #00cc00 100%);
+  box-shadow: inset 0 0 2px rgba(0,0,0,0.8);
+}
+
+/* Winamp Green LED indicator */
+.winamp-led-lit {
+  background-color: #00ff00;
+  box-shadow: 0 0 4px #00ff00, 0 0 1px #ffffff;
+}
+
+.winamp-led-unlit {
+  background-color: #0a330a;
+  border: 1px solid #061c06;
+}
+
+/* Custom retro sliders */
+input[type="range"].winamp-slider {
+  -webkit-appearance: none;
+  background: #000000;
+  height: 5px;
+  border-radius: 1px;
+  border-top: 1px solid #000;
+  border-left: 1px solid #000;
+  border-right: 1px solid #585878;
+  border-bottom: 1px solid #585878;
+  outline: none;
+}
+
+input[type="range"].winamp-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 10px;
+  background: linear-gradient(180deg, #e4e6f0 0%, #b8bac6 50%, #888a98 100%);
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 2px solid #181922;
+  border-bottom: 2px solid #181922;
+  border-radius: 1px;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.6);
+}
+
+input[type="range"].winamp-slider-volume {
+  -webkit-appearance: none;
+  background: linear-gradient(to right, #ff2200 0%, #ff8800 70%, #ffbb00 100%);
+  height: 4px;
+  border: 1px solid #000000;
+  outline: none;
+}
+
+input[type="range"].winamp-slider-volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 13px;
+  height: 9px;
+  background: linear-gradient(180deg, #e4e6f0 0%, #b8bac6 50%, #888a98 100%);
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 1.5px solid #181922;
+  border-bottom: 1.5px solid #181922;
+  border-radius: 1px;
+  cursor: pointer;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.8);
+}
+
+input[type="range"].winamp-slider-balance {
+  -webkit-appearance: none;
+  background: #000000;
+  height: 4px;
+  border: 1px solid #222;
+  outline: none;
+  position: relative;
+}
+
+input[type="range"].winamp-slider-balance::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 11px;
+  height: 9px;
+  background: linear-gradient(180deg, #e4e6f0 0%, #b8bac6 50%, #888a98 100%);
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 1.5px solid #181922;
+  border-bottom: 1.5px solid #181922;
+  border-radius: 1px;
+  cursor: pointer;
+}
+
+input[type="range"].winamp-slider-seek {
+  -webkit-appearance: none;
+  background: #000000;
+  height: 7px;
+  border-top: 1px solid #000;
+  border-left: 1px solid #000;
+  border-right: 1px solid #585878;
+  border-bottom: 1px solid #585878;
+  border-radius: 1px;
+  outline: none;
+}
+
+input[type="range"].winamp-slider-seek::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 28px;
+  height: 10px;
+  background: linear-gradient(180deg, #e4e6f0 0%, #b4b6c4 50%, #848694 100%);
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 2px solid #14141c;
+  border-bottom: 2px solid #14141c;
+  border-radius: 1px;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.7);
+}
+
+/* Dot matrix visualizer grid */
+.visualizer-grid {
+  background-size: 2px 2px;
+  background-image: linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+}
+
+/* Marquee scrolling animation */
+@keyframes winamp-marquee {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+.winamp-marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.winamp-marquee-content {
+  display: inline-block;
+  animation: winamp-marquee 15s linear infinite;
+  padding-right: 50px;
+}
+
+/* Scanlines style for display */
+.scanlines {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanlines::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.45) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 2;
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none;
+}
+
+/* Styled scrollbar for Playlist */
+.winamp-scrollbar::-webkit-scrollbar {
+  width: 12px;
+}
+
+.winamp-scrollbar::-webkit-scrollbar-track {
+  background: #111214;
+  border-left: 1px solid #3c3e45;
+}
+
+.winamp-scrollbar::-webkit-scrollbar-thumb {
+  background: #3c3e45;
+  border: 2px solid #111214;
+  border-radius: 2px;
+}
+
+.winamp-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #5a5c64;
+}
+
+/* ========================================================= */
+/* Authentic Winamp Classic Sprites (Direct from 2.91 skin) */
+/* ========================================================= */
+
+/* Transport Buttons (CBUTTONS.png) */
+.winamp-cbtn {
+  background-image: url('/skin/CBUTTONS.png');
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  display: inline-block;
+  padding: 0;
+  vertical-align: middle;
+}
+.winamp-cbtn-prev { width: 23px; height: 18px; background-position: 0px 0px; }
+.winamp-cbtn-prev:active { background-position: 0px -18px; }
+.winamp-cbtn-play { width: 23px; height: 18px; background-position: -23px 0px; }
+.winamp-cbtn-play:active { background-position: -23px -18px; }
+.winamp-cbtn-pause { width: 23px; height: 18px; background-position: -46px 0px; }
+.winamp-cbtn-pause:active { background-position: -46px -18px; }
+.winamp-cbtn-stop { width: 23px; height: 18px; background-position: -69px 0px; }
+.winamp-cbtn-stop:active { background-position: -69px -18px; }
+.winamp-cbtn-next { width: 23px; height: 18px; background-position: -92px 0px; }
+.winamp-cbtn-next:active { background-position: -92px -18px; }
+.winamp-cbtn-eject { width: 22px; height: 16px; background-position: -114px 0px; }
+.winamp-cbtn-eject:active { background-position: -114px -16px; }
+
+/* Shuffle & Repeat from SHUFREP.png */
+.winamp-sprite-shufrep {
+  background-image: url('/skin/SHUFREP.png');
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+.winamp-sprite-shuffle { width: 47px; height: 15px; background-position: -28px 0px; }
+.winamp-sprite-shuffle.active { background-position: -28px -30px; }
+.winamp-sprite-shuffle:active { background-position: -28px -45px; }
+
+.winamp-sprite-repeat { width: 28px; height: 15px; background-position: 0px 0px; }
+.winamp-sprite-repeat.active { background-position: 0px -30px; }
+.winamp-sprite-repeat:active { background-position: 0px -45px; }
+
+.winamp-sprite-eq { width: 23px; height: 12px; background-position: 0px -61px; }
+.winamp-sprite-eq.active { background-position: 0px -73px; }
+.winamp-sprite-pl { width: 23px; height: 12px; background-position: -23px -61px; }
+.winamp-sprite-pl.active { background-position: -23px -73px; }
+
+/* Equalizer Buttons from EQMAIN.png */
+.winamp-sprite-eqbtn {
+  background-image: url('/skin/EQMAIN.png');
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+.winamp-sprite-eq-on { width: 26px; height: 12px; background-position: -10px -119px; }
+.winamp-sprite-eq-on.active { background-position: -69px -119px; }
+.winamp-sprite-eq-auto { width: 32px; height: 12px; background-position: -36px -119px; }
+.winamp-sprite-eq-auto.active { background-position: -95px -119px; }
+.winamp-sprite-eq-presets { width: 44px; height: 12px; background-position: -224px -164px; }
+.winamp-sprite-eq-presets:active { background-position: -224px -176px; }
+
+/* Position Slider from POSBAR.png */
+input[type="range"].winamp-slider-posbar {
+  -webkit-appearance: none;
+  background: url('/skin/POSBAR.png') no-repeat 0 0;
+  image-rendering: pixelated;
+  height: 10px;
+  border: none;
+  outline: none;
+}
+input[type="range"].winamp-slider-posbar::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 29px;
+  height: 10px;
+  background: url('/skin/POSBAR.png') no-repeat -248px 0;
+  image-rendering: pixelated;
+  border: none;
+  cursor: pointer;
+}
+input[type="range"].winamp-slider-posbar::-webkit-slider-thumb:active {
+  background-position: -278px 0;
+}
+
