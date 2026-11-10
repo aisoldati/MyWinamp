@@ -9,6 +9,15 @@ import { audioManager } from './utils/audio';
 // Default pre-loaded tracks for classic experience
 const DEFAULT_TRACKS: Track[] = [
   {
+    id: 'yt-winamp-demo-intro',
+    title: 'Winamp Demo Intro',
+    artist: 'Nullsoft (Winamp Classic)',
+    duration: 6,
+    url: 'fNYdW_DLiLw',
+    source: 'youtube',
+    thumbnail: 'https://i.ytimg.com/vi/fNYdW_DLiLw/hqdefault.jpg',
+  },
+  {
     id: 'local-llama-intro',
     title: 'Winamp Intro (Llama Whip)',
     artist: 'DJ Mike Llama',
