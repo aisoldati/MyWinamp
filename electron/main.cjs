@@ -20,7 +20,7 @@ const ytm = require('./ytm.cjs');
 function startLocalServer() {
   return new Promise((resolve, reject) => {
     const distPath = path.join(__dirname, '../dist');
-    const portToUse = 3001;
+    const portToUse = 5050;
 
     server = http.createServer(async (req, res) => {
       res.setHeader('Access-Control-Allow-Origin', '*');
@@ -95,7 +95,7 @@ function startLocalServer() {
 }
 
 async function createWindow() {
-  let port = 3000;
+  let port = 5050;
   
   try {
     port = await startLocalServer();
