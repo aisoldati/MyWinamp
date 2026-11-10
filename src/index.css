@@ -77,6 +77,14 @@ html, body {
   border-top: 1px solid #2e2e46;
   border-bottom: 1px solid #101018;
   position: relative;
+  -webkit-app-region: drag;
+  user-select: none;
+}
+
+.winamp-titlebar-classic button,
+.winamp-titlebar-classic input,
+.winamp-titlebar-classic a {
+  -webkit-app-region: no-drag;
 }
 
 .winamp-titlebar-stripes {

@@ -545,6 +545,11 @@ export default function App() {
       return;
     }
 
+    // Main window uses native OS dragging (-webkit-app-region: drag)
+    if (id === 'main') {
+      return;
+    }
+
     dragInfoRef.current = {
       windowId: id,
       startX: e.clientX,
