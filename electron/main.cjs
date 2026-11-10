@@ -20,7 +20,7 @@ const ytm = require('./ytm.cjs');
 function startLocalServer() {
   return new Promise((resolve, reject) => {
     const distPath = path.join(__dirname, '../dist');
-    const portToUse = 5050;
+    const portToUse = 3000;
 
     server = http.createServer(async (req, res) => {
       res.setHeader('Access-Control-Allow-Origin', '*');
@@ -30,6 +30,41 @@ function startLocalServer() {
       if (req.method === 'OPTIONS') {
         res.statusCode = 204;
         res.end();
+        return;
+      }
+
+      if (req.url && req.url.startsWith('/auth/youtube/callback')) {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'text/html; charset=utf-8');
+        res.end(`<!DOCTYPE html>
+<html>
+<head><title>Winamp - Conectado</title></head>
+<body style="background:#0c0d10;color:#00e100;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;height:90vh;text-align:center;">
+  <div style="border:2px solid #00e100;padding:24px;border-radius:8px;background:#15161c;">
+    <h2 style="margin:0 0 10px;color:#22c55e;">⚡ ¡Conectado con YouTube Music!</h2>
+    <p style="color:#aaa;margin:0 0 15px;">Guardando sesión en Winamp...</p>
+    <div id="status" style="font-size:12px;color:#888;">Cerrando pestaña automáticamente...</div>
+  </div>
+  <script>
+    try {
+      const hash = window.location.hash.substring(1);
+      const params = new URLSearchParams(hash);
+      const token = params.get('access_token');
+      const expiresIn = params.get('expires_in') || 3600;
+      if (token) {
+        localStorage.setItem('youtube_token', token);
+        fetch('/api/auth/callback-token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token, expiresIn })
+        }).then(() => {
+          document.getElementById('status').innerText = '¡Listo! Puedes volver a Winamp.';
+          setTimeout(() => window.close(), 1000);
+        });
+      }
+    } catch(e) {}
+  </script>
+</body></html>`);
         return;
       }
 
@@ -77,12 +112,12 @@ function startLocalServer() {
       }
     });
 
-    server.listen(portToUse, '127.0.0.1', () => {
+    server.listen(portToUse, () => {
       console.log(`Production/API server listening on port ${portToUse}`);
       resolve(portToUse);
     }).on('error', (err) => {
       if (err.code === 'EADDRINUSE') {
-        server.listen(0, '127.0.0.1', () => {
+        server.listen(0, () => {
           const port = server.address().port;
           console.log(`Production/API server listening on random port ${port}`);
           resolve(port);
@@ -95,7 +130,7 @@ function startLocalServer() {
 }
 
 async function createWindow() {
-  let port = 5050;
+  let port = 3000;
   
   try {
     port = await startLocalServer();

@@ -21,7 +21,7 @@ export default defineConfig(() => {
                     proxyHeaders[k] = v;
                   }
                 }
-                const proxyRes = await fetch(`http://127.0.0.1:5050${req.url}`, {
+                const proxyRes = await fetch(`http://127.0.0.1:3000${req.url}`, {
                   method: req.method,
                   headers: proxyHeaders,
                   body: (req.method !== 'GET' && req.method !== 'HEAD') ? (req as any) : undefined,
