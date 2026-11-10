@@ -273,7 +273,6 @@ export default function PlaylistEditor({
 
     try {
       if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
-      setIsLoadingYtPlaylists(true);
       setIsPollingOAuth(true);
       const authUrl = getGoogleAuthUrl();
       
@@ -289,10 +288,9 @@ export default function PlaylistEditor({
           setIsPollingOAuth(false);
           setYoutubeToken(token);
           persistYoutubeToken(token);
-          setIsLoadingYtPlaylists(false);
           loadYoutubePlaylists(false, true);
         }
-      }, 1200);
+      }, 1000);
 
       // Timeout polling after 3 minutes
       setTimeout(() => {
@@ -775,7 +773,6 @@ export default function PlaylistEditor({
               <button 
                 id="youtube-connect-btn"
                 onClick={handleYoutubeConnect}
-                disabled={isLoadingYtPlaylists}
                 title="Conectar cuenta de Google / YouTube Music"
                 className="px-[5px] py-[2px] bg-red-950/70 hover:bg-red-900 border border-red-700 text-red-400 rounded-[2px] text-[8px] flex items-center gap-[2px] font-bold cursor-pointer font-pixel"
               >

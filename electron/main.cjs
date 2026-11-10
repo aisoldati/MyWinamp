@@ -38,31 +38,49 @@ function startLocalServer() {
         res.setHeader('Content-Type', 'text/html; charset=utf-8');
         res.end(`<!DOCTYPE html>
 <html>
-<head><title>Winamp - Conectado</title></head>
-<body style="background:#0c0d10;color:#00e100;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;height:90vh;text-align:center;">
-  <div style="border:2px solid #00e100;padding:24px;border-radius:8px;background:#15161c;">
-    <h2 style="margin:0 0 10px;color:#22c55e;">⚡ ¡Conectado con YouTube Music!</h2>
-    <p style="color:#aaa;margin:0 0 15px;">Guardando sesión en Winamp...</p>
+<head>
+  <meta charset="utf-8">
+  <title>Winamp - Conectado</title>
+</head>
+<body style="background:#0c0d10;color:#00e100;font-family:'Courier New', monospace, sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;height:90vh;text-align:center;">
+  <div style="border:2px solid #00e100;padding:28px 36px;border-radius:6px;background:#14151b;box-shadow:0 0 20px rgba(0,225,0,0.2);">
+    <h1 style="margin:0 0 8px;color:#00e100;font-size:20px;letter-spacing:2px;">WINAMP</h1>
+    <h2 style="margin:0 0 12px;color:#22c55e;font-size:16px;">⚡ ¡Conectado con YouTube Music!</h2>
+    <p id="msg" style="color:#aaa;margin:0 0 16px;font-size:13px;">Guardando sesión en Winamp...</p>
     <div id="status" style="font-size:12px;color:#888;">Cerrando pestaña automáticamente...</div>
   </div>
   <script>
-    try {
-      const hash = window.location.hash.substring(1);
-      const params = new URLSearchParams(hash);
-      const token = params.get('access_token');
-      const expiresIn = params.get('expires_in') || 3600;
-      if (token) {
-        localStorage.setItem('youtube_token', token);
-        fetch('/api/auth/callback-token', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ token, expiresIn })
-        }).then(() => {
-          document.getElementById('status').innerText = '¡Listo! Puedes volver a Winamp.';
-          setTimeout(() => window.close(), 1000);
-        });
+    (function() {
+      try {
+        const hash = window.location.hash.substring(1);
+        const search = window.location.search.substring(1);
+        const params = new URLSearchParams(hash || search);
+        const token = params.get('access_token');
+        const expiresIn = params.get('expires_in') || 3600;
+        if (token) {
+          try { localStorage.setItem('youtube_token', token); } catch(e){}
+          fetch('/api/auth/callback-token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token, expiresIn })
+          }).then(() => {
+            document.getElementById('msg').innerText = '¡Sesión transferida con éxito!';
+            document.getElementById('status').innerText = '¡Listo! Puedes volver a Winamp.';
+            setTimeout(() => {
+              window.close();
+            }, 800);
+          }).catch(() => {
+            document.getElementById('status').innerText = 'Sesión guardada en navegador. Puedes volver a Winamp.';
+          });
+        } else {
+          const err = params.get('error') || 'No se recibió token';
+          document.getElementById('msg').innerText = 'Error: ' + err;
+          document.getElementById('status').innerText = 'Cierra esta ventana e intenta de nuevo.';
+        }
+      } catch(e) {
+        document.getElementById('msg').innerText = 'Error: ' + e.message;
       }
-    } catch(e) {}
+    })();
   </script>
 </body></html>`);
         return;

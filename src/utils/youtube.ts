@@ -633,10 +633,15 @@ export async function openOAuthInSystemBrowser(url: string): Promise<boolean> {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ url }),
     });
-    return res.ok;
-  } catch {
+    if (res.ok) return true;
+  } catch (e) {
+    console.warn('Backend open-browser endpoint failed, falling back to window.open:', e);
+  }
+  try {
     window.open(url, '_blank');
     return true;
+  } catch {
+    return false;
   }
 }
 

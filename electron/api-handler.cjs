@@ -150,16 +150,20 @@ async function handleApiRequest(req, res, options = {}) {
       let opened = false;
       if (options.shell && options.shell.openExternal) {
         try {
-          options.shell.openExternal(url);
+          await options.shell.openExternal(url);
           opened = true;
-        } catch (e) {}
+        } catch (e) {
+          console.warn('shell.openExternal failed:', e.message);
+        }
       }
       if (!opened) {
         try {
           const { spawn } = require('child_process');
           spawn('powershell', ['-NoProfile', '-Command', `Start-Process '${url.replace(/'/g, "''")}'`], { detached: true, stdio: 'ignore' }).unref();
           opened = true;
-        } catch (e) {}
+        } catch (e) {
+          console.warn('PowerShell Start-Process failed:', e.message);
+        }
       }
       sendJson(res, { success: true });
     } else {

@@ -12,6 +12,12 @@ export default defineConfig(() => {
         name: 'winamp-api-server',
         configureServer(server) {
           server.middlewares.use(async (req, res, next) => {
+            if (req.url && req.url.startsWith('/auth/youtube/callback')) {
+              res.statusCode = 200;
+              res.setHeader('Content-Type', 'text/html; charset=utf-8');
+              res.end(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Winamp - Conectado</title></head><body style="background:#0c0d10;color:#00e100;font-family:monospace;display:flex;flex-direction:column;align-items:center;justify-content:center;height:90vh;text-align:center;"><div style="border:2px solid #00e100;padding:24px;border-radius:6px;background:#14151b;"><h2 style="color:#22c55e;">⚡ ¡Conectado con YouTube Music!</h2><p id="msg" style="color:#aaa;">Guardando sesión en Winamp...</p><div id="status" style="font-size:12px;color:#888;">Cerrando pestaña automáticamente...</div></div><script>(function(){try{const p=new URLSearchParams(window.location.hash.substring(1)||window.location.search.substring(1));const t=p.get('access_token');if(t){try{localStorage.setItem('youtube_token',t);}catch(e){}fetch('/api/auth/callback-token',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:t})}).then(()=>{document.getElementById('status').innerText='¡Listo! Puedes volver a Winamp.';setTimeout(()=>window.close(),800);});}}catch(e){}})();</script></body></html>`);
+              return;
+            }
             if (req.url && req.url.startsWith('/api/')) {
               try {
                 const proxyHeaders: Record<string, string> = {};
@@ -57,12 +63,9 @@ export default defineConfig(() => {
       },
     ],
     resolve: {
-      dedupe: ['react', 'react-dom'],
       alias: {
         '@': path.resolve(__dirname, '.'),
-        'react': path.resolve(__dirname, 'node_modules/react'),
-        'react-dom': path.resolve(__dirname, 'node_modules/react-dom'),
-        'lucide-react': path.resolve(__dirname, 'node_modules/lucide-react'),
+        'lucide-react': path.resolve(__dirname, 'node_modules/lucide-react/dist/cjs/lucide-react.js'),
       },
     },
     server: {
