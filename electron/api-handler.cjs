@@ -148,16 +148,17 @@ async function handleApiRequest(req, res, options = {}) {
     const { url } = body;
     if (url) {
       let opened = false;
-      try {
-        const { shell } = require('electron');
-        if (shell && shell.openExternal) {
-          shell.openExternal(url);
+      if (options.shell && options.shell.openExternal) {
+        try {
+          options.shell.openExternal(url);
           opened = true;
-        }
-      } catch (e) {}
+        } catch (e) {}
+      }
       if (!opened) {
         try {
-          exec(`start "" "${url}"`);
+          const { spawn } = require('child_process');
+          spawn('powershell', ['-NoProfile', '-Command', `Start-Process '${url.replace(/'/g, "''")}'`], { detached: true, stdio: 'ignore' }).unref();
+          opened = true;
         } catch (e) {}
       }
       sendJson(res, { success: true });

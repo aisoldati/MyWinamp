@@ -73,6 +73,7 @@ function startLocalServer() {
           const handled = await handleApiRequest(req, res, {
             isElectron: true,
             getMainWindow: () => mainWindow,
+            shell,
           });
           if (handled) return;
         } catch (err) {
