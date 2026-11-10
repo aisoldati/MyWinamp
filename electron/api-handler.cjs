@@ -147,15 +147,18 @@ async function handleApiRequest(req, res, options = {}) {
     const body = await readBody(req);
     const { url } = body;
     if (url) {
+      let opened = false;
       try {
-        const electron = require('electron');
-        if (electron.shell) {
-          electron.shell.openExternal(url);
-        } else {
-          exec(`start "" "${url}"`);
+        const { shell } = require('electron');
+        if (shell && shell.openExternal) {
+          shell.openExternal(url);
+          opened = true;
         }
-      } catch (e) {
-        exec(`start "" "${url}"`);
+      } catch (e) {}
+      if (!opened) {
+        try {
+          exec(`start "" "${url}"`);
+        } catch (e) {}
       }
       sendJson(res, { success: true });
     } else {

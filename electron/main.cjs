@@ -165,32 +165,9 @@ async function createWindow() {
     mainWindow.webContents.openDevTools({ mode: 'detach' });
   }
 
-  // Handle OAuth popups and open external links in browser
+  // Open all external URLs (including Google login) in system default browser (Chrome/Edge)
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    // Google OAuth flows need to open inside Electron popup windows
-    if (
-      url === 'about:blank' ||
-      url.includes('accounts.google.com') ||
-      url.includes('/auth/youtube/callback')
-    ) {
-      return {
-        action: 'allow',
-        overrideBrowserWindowOptions: {
-          width: 550,
-          height: 650,
-          autoHideMenuBar: true,
-          webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-            sandbox: true,
-          }
-        }
-      };
-    }
-    
-    // Default browser for other links
     shell.openExternal(url);
-
     return { action: 'deny' };
   });
 

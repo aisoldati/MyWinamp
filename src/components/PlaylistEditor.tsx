@@ -1063,7 +1063,7 @@ export default function PlaylistEditor({
       )}
 
       {/* 4b. OVERLAY: Connect / Login Modal */}
-      {showConnectModal && (
+      {false && (
         <div className="absolute inset-x-0 bottom-[22px] top-[14px] bg-[#141416]/95 border-t border-black p-3 flex flex-col justify-between z-40 font-pixel">
           <div className="flex items-center justify-between border-b border-gray-800 pb-1 mb-2">
             <span className="text-red-400 font-bold text-[9px] flex items-center gap-1">
