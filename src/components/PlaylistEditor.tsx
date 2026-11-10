@@ -76,6 +76,24 @@ export default function PlaylistEditor({
   const [showConfig, setShowConfig] = useState(false);
   const [copiedUri, setCopiedUri] = useState(false);
   const [customGoogleClientId, setCustomGoogleClientId] = useState(() => getGoogleClientId());
+  const [directTokenInput, setDirectTokenInput] = useState('');
+
+  const handleSaveDirectToken = () => {
+    let raw = directTokenInput.trim();
+    if (!raw) return;
+    let token = raw;
+    if (raw.includes('access_token=')) {
+      const match = raw.match(/access_token=([a-zA-Z0-9_\-\.]+)/);
+      if (match && match[1]) token = match[1];
+    }
+    if (token) {
+      setYoutubeToken(token);
+      persistYoutubeToken(token);
+      setShowConfig(false);
+      setDirectTokenInput('');
+      loadYoutubePlaylists(false, true);
+    }
+  };
 
   // Search States (YouTube/Invidious only)
   const [searchQuery, setSearchQuery] = useState('');
@@ -1260,13 +1278,32 @@ export default function PlaylistEditor({
                 <button
                   onClick={() => {
                     setShowConfig(false);
-                    setShowConnectModal(true);
+                    handleBrowserLogin();
                   }}
                   className="w-full py-[3px] bg-red-950/80 hover:bg-red-900 border border-red-800 text-red-300 text-[8px] rounded-[1px] font-bold cursor-pointer"
                 >
-                  ⚡ Iniciar Sesión Permanente
+                  🌐 Iniciar Sesión en Navegador
                 </button>
               )}
+            </div>
+
+            <div className="bg-black/50 p-1.5 border border-gray-800 rounded-[1px] mt-1 flex flex-col gap-1">
+              <span className="text-[7px] text-[#00e100] font-bold">Pegar Token o Enlace de Retorno:</span>
+              <div className="flex gap-1">
+                <input
+                  type="text"
+                  placeholder="Pegar URL de callback o token ya29..."
+                  value={directTokenInput}
+                  onChange={(e) => setDirectTokenInput(e.target.value)}
+                  className="flex-1 bg-black text-[#00e100] border border-gray-700 text-[8px] px-1 py-[2px] focus:outline-none rounded-[1px] font-mono text-[7px]"
+                />
+                <button
+                  onClick={handleSaveDirectToken}
+                  className="px-2 py-[2px] bg-green-950 hover:bg-green-900 border border-green-700 text-green-300 rounded-[1px] text-[7px] font-bold cursor-pointer shrink-0"
+                >
+                  Guardar
+                </button>
+              </div>
             </div>
 
             <span className="text-[8px] text-gray-300 font-bold mt-1">Google Client ID:</span>
