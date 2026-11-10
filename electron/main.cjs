@@ -12,7 +12,7 @@ app.userAgentFallback = CHROME_UA;
 let server = null;
 let mainWindow = null;
 
-const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
+const isDev = process.env.VITE_DEV_SERVER_URL ? true : false;
 
 const ytm = require('./ytm.cjs');
 
@@ -20,7 +20,7 @@ const ytm = require('./ytm.cjs');
 function startLocalServer() {
   return new Promise((resolve, reject) => {
     const distPath = path.join(__dirname, '../dist');
-    const portToUse = isDev ? 3001 : 3000;
+    const portToUse = 3001;
 
     server = http.createServer(async (req, res) => {
       res.setHeader('Access-Control-Allow-Origin', '*');
@@ -121,8 +121,8 @@ async function createWindow() {
     },
   });
 
-  if (isDev) {
-    mainWindow.loadURL('http://localhost:3000');
+  if (isDev && process.env.VITE_DEV_SERVER_URL) {
+    mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL);
   } else {
     mainWindow.loadURL(`http://localhost:${port}`);
   }
