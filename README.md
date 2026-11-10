@@ -29,8 +29,8 @@ Includes real-time YouTube & YouTube Music playback, classic equalizer, video wi
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/aisoldati/winamp.git
-   cd winamp
+   git clone https://github.com/aisoldati/MyWinamp.git
+   cd MyWinamp
    ```
 
 2. Install dependencies:
@@ -38,14 +38,14 @@ Includes real-time YouTube & YouTube Music playback, classic equalizer, video wi
    npm install
    ```
 
-3. Start in development mode (Vite):
+3. Launch Desktop App:
    ```bash
-   npm run dev
+   npm start
    ```
 
-4. Or launch as Desktop App (Electron):
+   Or run in browser (Vite):
    ```bash
-   npm run electron:dev
+   npm run dev
    ```
 
 ---
