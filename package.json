@@ -8,6 +8,7 @@
   "main": "electron/main.cjs",
   "scripts": {
     "dev": "node node_modules/vite/bin/vite.js --port=3000 --host=0.0.0.0",
+    "start": "npx electron .",
     "build": "node node_modules/vite/bin/vite.js build",
     "preview": "node node_modules/vite/bin/vite.js preview",
     "clean": "rm -rf dist server.js",
