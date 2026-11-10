@@ -236,10 +236,11 @@ async function getUserPlaylists(authToken = null, forceRefresh = false) {
   const fetchOptionsYTM = { isYTM: true, authToken };
   const fetchOptionsYT = { isYTM: false, authToken };
 
-  // Run all 4 browse endpoints in parallel instead of sequentially
+  // Run all browse endpoints in parallel to sweep all followed and created playlists
   const results = await Promise.allSettled([
     fetchInnerTube('browse', { browseId: 'FEmusic_liked_playlists' }, fetchOptionsYTM),
     fetchInnerTube('browse', { browseId: 'FEmusic_library_landing' }, fetchOptionsYTM),
+    fetchInnerTube('browse', { browseId: 'FEmusic_library_corpus_playlists' }, fetchOptionsYTM),
     fetchInnerTube('browse', { browseId: 'FEplaylist_aggregation' }, fetchOptionsYT),
     fetchInnerTube('browse', { browseId: 'FElibrary' }, fetchOptionsYT),
   ]);
