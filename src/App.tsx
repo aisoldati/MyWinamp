@@ -71,6 +71,7 @@ export default function App() {
     startY: number;
     startWinX: number;
     startWinY: number;
+    initialWindows: WindowConfig[];
   } | null>(null);
 
   const resizeInfoRef = useRef<{
@@ -537,6 +538,7 @@ export default function App() {
       startY: e.clientY,
       startWinX: win.x,
       startWinY: win.y,
+      initialWindows: windows.map(w => ({ ...w })),
     };
     
     e.currentTarget.setPointerCapture(e.pointerId);
@@ -645,6 +647,19 @@ export default function App() {
         targetY = other.y + otherHeight;
       }
     });
+
+    // If dragging the Main Window, move all open docked windows together
+    if (windowId === 'main') {
+      const deltaX = targetX - startWinX;
+      const deltaY = targetY - startWinY;
+      setWindows(
+        windows.map((w) => {
+          const init = dragInfoRef.current?.initialWindows.find((iw) => iw.id === w.id);
+          return init ? { ...w, x: init.x + deltaX, y: init.y + deltaY } : w;
+        })
+      );
+      return;
+    }
 
     setWindows(windows.map((w) => w.id === windowId ? { ...w, x: targetX, y: targetY } : w));
   };

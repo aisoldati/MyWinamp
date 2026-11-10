@@ -795,6 +795,17 @@ export default function PlaylistEditor({
             {tracks.map((track, idx) => {
               const isPlaying = idx === currentTrackIndex;
               const isSelected = selectedTrackIndex !== undefined ? idx === selectedTrackIndex : isPlaying;
+
+              // High-intensity color scheme for currently playing vs selected vs normal tracks
+              let rowStyle = 'text-[#00aa00] hover:bg-[#151520]';
+              if (isPlaying && isSelected) {
+                rowStyle = 'bg-[#0000ff] text-[#ffffff] font-bold shadow-[inset_0_0_10px_rgba(0,255,255,0.6)]';
+              } else if (isPlaying) {
+                rowStyle = 'bg-[#0a380a] text-[#39ff14] font-bold border-l-2 border-[#39ff14] shadow-[inset_0_0_8px_rgba(57,255,20,0.3)]';
+              } else if (isSelected) {
+                rowStyle = 'bg-[#000099] text-[#70d6ff] font-medium';
+              }
+
               return (
                 <div 
                   key={track.id}
@@ -808,10 +819,17 @@ export default function PlaylistEditor({
                       onSelectTrack(idx);
                     }
                   }}
-                  className={`flex items-center justify-between py-[1px] px-[4px] border-b border-[#0d0d14] hover:bg-[#181826] group cursor-pointer select-none leading-none ${isSelected ? theme.trackActive : 'text-[#00e100]'}`}
+                  className={`flex items-center justify-between py-[1.5px] px-[4px] border-b border-[#0d0d14] group cursor-pointer select-none leading-none transition-colors ${rowStyle}`}
                 >
                   <div className="flex items-center gap-[3px] truncate flex-1 pr-[4px]">
-                    <span className={`text-[10px] w-[18px] shrink-0 text-right ${isSelected ? 'text-[#00ffff]' : 'text-[#00aa00]'}`}>{idx + 1}.</span>
+                    {isPlaying ? (
+                      <span className="text-[#39ff14] font-bold text-[9px] w-[12px] shrink-0 text-center animate-pulse">▶</span>
+                    ) : (
+                      <span className="w-[12px] shrink-0" />
+                    )}
+                    <span className={`text-[10px] w-[18px] shrink-0 text-right ${isPlaying ? 'text-[#ffff00] font-bold' : isSelected ? 'text-[#00ffff]' : 'text-[#00aa00]'}`}>
+                      {idx + 1}.
+                    </span>
                     {track.source === 'youtube' && <Youtube size={10} className="text-red-500 shrink-0" />}
                     <span className="truncate">
                       {track.artist} - {track.title}
@@ -820,7 +838,7 @@ export default function PlaylistEditor({
                   
                   {/* Track Duration or Row Actions */}
                   <div className="flex items-center gap-[4px] shrink-0">
-                    <span className={`text-[10px] font-mono group-hover:hidden ${isSelected ? 'text-[#00ffff]' : 'text-[#00e100]'}`}>
+                    <span className={`text-[10px] font-mono group-hover:hidden ${isPlaying ? 'text-[#ffff00] font-bold' : isSelected ? 'text-[#00ffff]' : 'text-[#00e100]'}`}>
                       {Math.floor(track.duration / 60)}:{(track.duration % 60).toString().padStart(2, '0')}
                     </span>
                     
