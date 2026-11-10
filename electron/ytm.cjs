@@ -9,6 +9,7 @@ const crypto = require('crypto');
 
 const PARTITION = 'persist:ytm_session';
 const CHROME_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36';
+const FIREFOX_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0';
 
 let playlistsCache = { data: null, timestamp: 0, key: '' };
 const PLAYLIST_CACHE_TTL_MS = 60 * 1000;
@@ -19,15 +20,19 @@ let headersHookInstalled = false;
 function getSession() {
   if (!session) return null;
   const ses = session.fromPartition(PARTITION);
-  ses.setUserAgent(CHROME_UA);
+  ses.setUserAgent(FIREFOX_UA);
   if (!headersHookInstalled) {
     headersHookInstalled = true;
     try {
       ses.webRequest.onBeforeSendHeaders((details, callback) => {
-        details.requestHeaders['User-Agent'] = CHROME_UA;
-        delete details.requestHeaders['X-DevTools-Emulate-Network-Conditions-Client-Id'];
-        if (details.requestHeaders['sec-ch-ua']) {
-          details.requestHeaders['sec-ch-ua'] = '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"';
+        const url = details.url || '';
+        if (url.includes('google.com') || url.includes('youtube.com')) {
+          details.requestHeaders['User-Agent'] = FIREFOX_UA;
+          delete details.requestHeaders['sec-ch-ua'];
+          delete details.requestHeaders['sec-ch-ua-mobile'];
+          delete details.requestHeaders['sec-ch-ua-platform'];
+          delete details.requestHeaders['sec-ch-ua-model'];
+          delete details.requestHeaders['X-DevTools-Emulate-Network-Conditions-Client-Id'];
         }
         callback({ cancel: false, requestHeaders: details.requestHeaders });
       });
@@ -382,7 +387,7 @@ function openLoginWindow() {
     });
 
     activeLoginWindow = loginWin;
-    loginWin.webContents.setUserAgent(CHROME_UA);
+    loginWin.webContents.setUserAgent(FIREFOX_UA);
 
     let isDone = false;
 
