@@ -791,7 +791,7 @@ export default function PlaylistEditor({
             <span className="text-[8px] leading-tight font-pixel text-[#00aa00]">Lista vacía. Conecta YouTube o usa +ADD</span>
           </div>
         ) : (
-          <div className="flex flex-col text-[9px] font-pixel">
+          <div className="flex flex-col font-winamp-playlist text-[11px]">
             {tracks.map((track, idx) => {
               const isPlaying = idx === currentTrackIndex;
               const isSelected = selectedTrackIndex !== undefined ? idx === selectedTrackIndex : isPlaying;
@@ -808,19 +808,19 @@ export default function PlaylistEditor({
                       onSelectTrack(idx);
                     }
                   }}
-                  className={`flex items-center justify-between py-[1.5px] px-[4px] border-b border-[#0d0d14] hover:bg-[#181826] group cursor-pointer select-none ${isSelected ? theme.trackActive : 'text-[#00e100]'}`}
+                  className={`flex items-center justify-between py-[1px] px-[4px] border-b border-[#0d0d14] hover:bg-[#181826] group cursor-pointer select-none leading-none ${isSelected ? theme.trackActive : 'text-[#00e100]'}`}
                 >
                   <div className="flex items-center gap-[3px] truncate flex-1 pr-[4px]">
-                    <span className={`text-[7px] w-[14px] shrink-0 text-right ${isSelected ? 'text-[#00ffff]' : 'text-[#00aa00]'}`}>{idx + 1}.</span>
-                    {track.source === 'youtube' && <Youtube size={9} className="text-red-500 shrink-0" />}
-                    <span className="truncate leading-none">
+                    <span className={`text-[10px] w-[18px] shrink-0 text-right ${isSelected ? 'text-[#00ffff]' : 'text-[#00aa00]'}`}>{idx + 1}.</span>
+                    {track.source === 'youtube' && <Youtube size={10} className="text-red-500 shrink-0" />}
+                    <span className="truncate">
                       {track.artist} - {track.title}
                     </span>
                   </div>
                   
                   {/* Track Duration or Row Actions */}
                   <div className="flex items-center gap-[4px] shrink-0">
-                    <span className={`text-[8px] font-mono group-hover:hidden ${isSelected ? 'text-[#00ffff]' : 'text-[#00e100]'}`}>
+                    <span className={`text-[10px] font-mono group-hover:hidden ${isSelected ? 'text-[#00ffff]' : 'text-[#00e100]'}`}>
                       {Math.floor(track.duration / 60)}:{(track.duration % 60).toString().padStart(2, '0')}
                     </span>
                     

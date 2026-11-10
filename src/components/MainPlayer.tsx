@@ -448,7 +448,7 @@ export default function MainPlayer({
               {/* Row 1: Marquee Title */}
               <div className="h-[13px] px-[3px] bg-black border border-[#1a1a24] flex items-center overflow-hidden w-full select-none">
                 <div className="winamp-marquee-container w-full">
-                  <span className="winamp-marquee-content inline-block text-[9px] font-pixel text-[#00ff00]">
+                  <span className="winamp-marquee-content inline-block text-[9px] font-pixel text-[#00ff00] uppercase tracking-wider">
                     {currentTrack ? `${currentTrack.artist} - ${currentTrack.title}` : "WINAMP - IT REALLY WHIPS THE LLAMA'S ASS"}
                   </span>
                 </div>

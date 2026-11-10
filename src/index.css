@@ -1,11 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Share+Tech+Mono&family=VT323&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "MS Sans Serif", "Microsoft Sans Serif", Tahoma, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: "Share Tech Mono", "JetBrains Mono", monospace;
   --font-digital: "VT323", monospace;
-  --font-pixel: "Press Start 2P", monospace;
+  --font-pixel: "Silkscreen", "MS Sans Serif", "Microsoft Sans Serif", Tahoma, monospace;
+}
+
+/* Winamp Classic Retro Font & Rendering Rules */
+.font-pixel, [class*="font-pixel"] {
+  font-family: var(--font-pixel);
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: geometricPrecision;
+  letter-spacing: 0.3px;
+}
+
+.font-winamp-playlist {
+  font-family: "MS Sans Serif", "Microsoft Sans Serif", Tahoma, "Segoe UI", sans-serif;
+  font-size: 11px;
+  line-height: 14px;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: geometricPrecision;
 }
 
 /* Winamp Classic custom styles */
