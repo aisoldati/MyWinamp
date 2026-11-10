@@ -288,15 +288,7 @@ export default function PlaylistEditor({
   };
 
   const handleYoutubeConnect = () => {
-    if (isDirectYTM) {
-      setShowConnectModal(true);
-      setShowPlaylistExplorer(false);
-      setShowSearchPanel(false);
-      setShowUrlPanel(false);
-      setShowConfig(false);
-    } else {
-      handleBrowserLogin();
-    }
+    handleBrowserLogin();
   };
 
   const handleYoutubeDisconnect = async () => {
