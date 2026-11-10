@@ -80,6 +80,9 @@ async function handleApiRequest(req, res, options = {}) {
   const { getMainWindow = () => null, isElectron = false } = options;
   const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   const pathname = parsedUrl.pathname;
+  if (!pathname.startsWith('/api/auth/poll-token')) {
+    console.log('[API]', req.method, pathname);
+  }
 
   if (req.method === 'OPTIONS') {
     res.statusCode = 204;
@@ -142,30 +145,59 @@ async function handleApiRequest(req, res, options = {}) {
     return true;
   }
 
-  // 4. Open URL in system default browser
+  // 4. Open URL in system default browser (robust foreground launch)
   if (pathname === '/api/auth/open-browser' && req.method === 'POST') {
     const body = await readBody(req);
     const { url } = body;
     if (url) {
+      console.log('[API] Opening browser for URL:', url);
       let opened = false;
+
+      // 1. Try launching Chrome or Edge executable directly to force foreground window
+      const localAppData = process.env.LOCALAPPDATA || '';
+      const browserCandidates = [
+        'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+        'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+        path.join(localAppData, 'Google\\Chrome\\Application\\chrome.exe'),
+        'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
+        'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
+      ];
+
+      for (const bPath of browserCandidates) {
+        if (bPath && fs.existsSync(bPath)) {
+          try {
+            const { spawn } = require('child_process');
+            const child = spawn(bPath, [url], { detached: true, stdio: 'ignore' });
+            child.unref();
+            opened = true;
+            console.log('[API] Spawned browser executable directly:', bPath);
+            break;
+          } catch (e) {
+            console.warn('[API] Failed to spawn browser executable:', bPath, e.message);
+          }
+        }
+      }
+
+      // 2. Electron native shell.openExternal
       if (options.shell && options.shell.openExternal) {
         try {
           await options.shell.openExternal(url);
           opened = true;
         } catch (e) {
-          console.warn('shell.openExternal failed:', e.message);
+          console.warn('[API] shell.openExternal failed:', e.message);
         }
       }
+
+      // 3. System fallback: rundll32 / Start-Process
       if (!opened) {
         try {
           const { spawn } = require('child_process');
-          spawn('powershell', ['-NoProfile', '-Command', `Start-Process '${url.replace(/'/g, "''")}'`], { detached: true, stdio: 'ignore' }).unref();
+          spawn('rundll32.exe', ['url.dll,FileProtocolHandler', url], { detached: true, stdio: 'ignore' }).unref();
           opened = true;
-        } catch (e) {
-          console.warn('PowerShell Start-Process failed:', e.message);
-        }
+        } catch (e) {}
       }
-      sendJson(res, { success: true });
+
+      sendJson(res, { success: true, opened });
     } else {
       sendJson(res, { error: 'URL requerida' }, 400);
     }

@@ -4,6 +4,20 @@ const fs = require('fs');
 const http = require('http');
 const { handleApiRequest, loadPersistedAuth } = require('./api-handler.cjs');
 
+const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) {
+  console.log('Another instance of Winamp is already running. Exiting second instance.');
+  app.quit();
+  process.exit(0);
+}
+
+app.on('second-instance', () => {
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) mainWindow.restore();
+    mainWindow.focus();
+  }
+});
+
 const CHROME_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36';
 app.commandLine.appendSwitch('disable-blink-features', 'AutomationControlled');
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
@@ -189,8 +203,13 @@ async function createWindow() {
     mainWindow.webContents.openDevTools({ mode: 'detach' });
   }
 
+  mainWindow.webContents.on('console-message', (event, level, message) => {
+    console.log(`[Renderer] ${message}`);
+  });
+
   // Open all external URLs (including Google login) in system default browser (Chrome/Edge)
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    console.log('[main] Opening external URL in default browser:', url);
     shell.openExternal(url);
     return { action: 'deny' };
   });

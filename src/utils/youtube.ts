@@ -627,22 +627,23 @@ export async function logoutDirectYTM(): Promise<void> {
 }
 
 export async function openOAuthInSystemBrowser(url: string): Promise<boolean> {
+  // 1. Direct window.open with user gesture
   try {
-    const res = await fetch('/api/auth/open-browser', {
+    window.open(url, '_blank');
+  } catch (e) {
+    console.warn('window.open failed:', e);
+  }
+
+  // 2. Direct backend process spawn (bypasses browser focus restrictions)
+  try {
+    fetch('/api/auth/open-browser', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ url }),
-    });
-    if (res.ok) return true;
-  } catch (e) {
-    console.warn('Backend open-browser endpoint failed, falling back to window.open:', e);
-  }
-  try {
-    window.open(url, '_blank');
-    return true;
-  } catch {
-    return false;
-  }
+    }).catch(() => {});
+  } catch (e) {}
+
+  return true;
 }
 
 export async function pollOAuthToken(): Promise<string | null> {
