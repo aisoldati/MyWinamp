@@ -344,6 +344,27 @@ async function handleApiRequest(req, res, options = {}) {
   }
 
   // 13. Window controls
+  if (pathname === '/api/window/move' && req.method === 'POST') {
+    const win = getMainWindow();
+    if (win) {
+      const data = await parseBody(req);
+      const [curX, curY] = win.getPosition();
+      win.setPosition(curX + Math.round(data.dx || 0), curY + Math.round(data.dy || 0));
+    }
+    sendJson(res, { success: true });
+    return true;
+  }
+  if (pathname === '/api/window/resize' && req.method === 'POST') {
+    const win = getMainWindow();
+    if (win) {
+      const data = await parseBody(req);
+      if (data.width && data.height) {
+        win.setSize(Math.round(data.width), Math.round(data.height));
+      }
+    }
+    sendJson(res, { success: true });
+    return true;
+  }
   if (pathname === '/api/window/minimize' && req.method === 'POST') {
     const win = getMainWindow();
     if (win) win.minimize();

@@ -123,6 +123,19 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // Auto-fit Electron OS window bounds to wrap all open Winamp modules snugly
+  useEffect(() => {
+    const openWins = windows.filter((w) => w.isOpen);
+    const maxX = Math.max(...openWins.map((w) => w.x + w.width), 275);
+    const maxY = Math.max(...openWins.map((w) => w.y + (w.isShaded ? 14 : w.height)), 116);
+    const scale = doubleSize ? 2 : 1;
+    fetch('/api/window/resize', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ width: maxX * scale + 10, height: maxY * scale + 10 }),
+    }).catch(() => {});
+  }, [windows, doubleSize]);
+
   // Load YouTube Iframe API
   useEffect(() => {
     const checkYT = () => {
@@ -648,16 +661,23 @@ export default function App() {
       }
     });
 
-    // If dragging the Main Window, move all open docked windows together
+    // If dragging the Main Window, move the native OS window across the entire desktop!
     if (windowId === 'main') {
-      const deltaX = targetX - startWinX;
-      const deltaY = targetY - startWinY;
-      setWindows(
-        windows.map((w) => {
-          const init = dragInfoRef.current?.initialWindows.find((iw) => iw.id === w.id);
-          return init ? { ...w, x: init.x + deltaX, y: init.y + deltaY } : w;
-        })
-      );
+      const moveDx = e.clientX - startX;
+      const moveDy = e.clientY - startY;
+      if (Math.abs(moveDx) > 0 || Math.abs(moveDy) > 0) {
+        fetch('/api/window/move', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ dx: moveDx, dy: moveDy }),
+        }).catch(() => {});
+        // Update drag start position so movement is smooth and continuous
+        dragInfoRef.current = {
+          ...dragInfoRef.current,
+          startX: e.clientX,
+          startY: e.clientY,
+        };
+      }
       return;
     }
 
