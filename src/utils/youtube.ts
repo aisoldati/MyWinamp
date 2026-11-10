@@ -20,11 +20,16 @@ export function setGoogleClientId(id: string) {
 
 export function getGoogleAuthUrl(): string {
   const redirectUri = 'http://localhost:3000/auth/youtube/callback';
+  const scopes = [
+    'https://www.googleapis.com/auth/youtube.readonly',
+    'https://www.googleapis.com/auth/youtube',
+    'https://www.googleapis.com/auth/youtube.force-ssl',
+  ];
   const params = new URLSearchParams({
     client_id: getGoogleClientId(),
     redirect_uri: redirectUri,
     response_type: 'token',
-    scope: 'https://www.googleapis.com/auth/youtube.readonly',
+    scope: scopes.join(' '),
     include_granted_scopes: 'true',
     prompt: 'select_account',
   });

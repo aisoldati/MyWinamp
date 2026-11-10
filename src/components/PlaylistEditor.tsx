@@ -885,7 +885,17 @@ export default function PlaylistEditor({
               <Library size={10} />
               <span>BIBLIOTECA DE PLAYLISTS</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
+              <button
+                onClick={() => {
+                  setShowUrlPanel(true);
+                  setShowPlaylistExplorer(false);
+                }}
+                className="px-1.5 py-[1px] bg-green-950/80 hover:bg-green-900 border border-green-800 text-[7px] text-[#00e100] rounded-[1px] font-bold cursor-pointer flex items-center gap-1"
+                title="Pegar enlace de cualquier playlist seguida para importarla"
+              >
+                <span>➕</span> Importar Link
+              </button>
               <span className="text-[8px] text-gray-500">{filteredPlaylists.length} listas</span>
               {youtubeToken ? (
                 <button
