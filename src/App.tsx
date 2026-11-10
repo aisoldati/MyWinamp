@@ -48,8 +48,10 @@ export default function App() {
     { id: 'main', title: 'Main Window', x: 0, y: 0, isOpen: true, isShaded: false, width: 275, height: 116 },
     { id: 'equalizer', title: 'Equalizer', x: 0, y: 116, isOpen: true, isShaded: false, width: 275, height: 116 },
     { id: 'playlist', title: 'Playlist Editor', x: 0, y: 232, isOpen: true, isShaded: false, width: 275, height: 232 },
-    { id: 'video', title: 'Video Window', x: 275, y: 0, isOpen: true, isShaded: false, width: 275, height: 232 },
+    { id: 'video', title: 'Video Window', x: 275, y: 0, isOpen: false, isShaded: false, width: 275, height: 232 },
   ]);
+
+  const [doubleSize, setDoubleSize] = useState<boolean>(false);
 
   const [activeWindowId, setActiveWindowId] = useState<string>('main');
 
@@ -98,6 +100,18 @@ export default function App() {
       setCurrentTime(0);
     }
   }, [currentTrackIndex, playlist]);
+
+  // Keyboard shortcut: Ctrl+D toggles Double Size (2x) mode (classic Winamp feature)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'd') {
+        e.preventDefault();
+        setDoubleSize((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // Load YouTube Iframe API
   useEffect(() => {
@@ -656,9 +670,16 @@ export default function App() {
   const vidWin = getWindowConfig('video');
 
   return (
-    <div className="w-full h-full min-h-screen bg-[#0d0e12] relative overflow-hidden select-none flex flex-col font-sans text-gray-200">
+    <div className="w-full h-full min-h-screen bg-transparent relative overflow-hidden select-none flex flex-col font-sans text-gray-200">
       {/* DRAGGABLE WINDOWS CONTEXT CONTAINER */}
-      <div className="w-full flex-1 relative p-0 overflow-hidden">
+      <div 
+        className="w-full flex-1 relative p-0 overflow-hidden"
+        style={{
+          transform: doubleSize ? 'scale(2)' : 'none',
+          transformOrigin: 'top left',
+          imageRendering: 'pixelated',
+        }}
+      >
 
         {/* 1. Main Window */}
         {mainWin.isOpen && (
@@ -676,7 +697,7 @@ export default function App() {
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onDoubleClick={(e) => handleWindowDoubleClick('main', e)}
-            className="transition-all duration-75 shadow-2xl rounded-[3px] select-none touch-none"
+            className="rounded-none select-none touch-none"
           >
             <MainPlayer 
               currentTrack={currentTrack}
@@ -691,6 +712,7 @@ export default function App() {
               isEqOpen={eqWin.isOpen}
               isPlOpen={plWin.isOpen}
               isVideoOpen={vidWin.isOpen}
+              isDoubleSize={doubleSize}
               onPlay={playTrack}
               onPause={pauseTrack}
               onStop={stopTrack}
@@ -704,6 +726,7 @@ export default function App() {
               onToggleEq={() => toggleWindow('equalizer')}
               onTogglePl={() => toggleWindow('playlist')}
               onToggleVideo={() => toggleWindow('video')}
+              onToggleDoubleSize={() => setDoubleSize(!doubleSize)}
               onEject={() => toggleWindow('playlist')}
               onSkinChange={setSkin}
             />
@@ -726,7 +749,7 @@ export default function App() {
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onDoubleClick={(e) => handleWindowDoubleClick('equalizer', e)}
-            className="transition-all duration-75 shadow-2xl rounded-[3px] select-none touch-none relative group"
+            className="rounded-none select-none touch-none relative group"
           >
             <Equalizer 
               skin={skin} 
@@ -751,7 +774,7 @@ export default function App() {
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onDoubleClick={(e) => handleWindowDoubleClick('playlist', e)}
-            className="transition-all duration-75 shadow-2xl rounded-[3px] select-none touch-none relative group"
+            className="rounded-none select-none touch-none relative group"
           >
             <PlaylistEditor 
               tracks={playlist}

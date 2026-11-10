@@ -26,6 +26,13 @@
   text-rendering: geometricPrecision;
 }
 
+html, body {
+  background: transparent !important;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 /* Winamp Classic custom styles */
 .winamp-textured {
   background: #1c1c1f;
@@ -370,9 +377,11 @@ input[type="range"].winamp-slider-seek::-webkit-slider-thumb {
 /* Position Slider from POSBAR.png */
 input[type="range"].winamp-slider-posbar {
   -webkit-appearance: none;
-  background: url('/skin/POSBAR.png') no-repeat 0 0;
+  background: url('/skin/POSBAR_TRACK.png') no-repeat 0 0;
   image-rendering: pixelated;
   height: 10px;
+  width: 248px;
+  margin: 0 auto;
   border: none;
   outline: none;
 }

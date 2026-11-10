@@ -1388,13 +1388,24 @@ export default function PlaylistEditor({
 
       {/* 8. Classic Winamp Bottom Navigation Bar */}
       <div className="h-[24px] flex justify-between items-center text-[7px] border-t border-[#181824] pt-[2px] mt-[1px] relative select-none">
+        {/* Backdrop for closing popups when clicking anywhere outside */}
+        {(showAddMenu || showRemMenu) && (
+          <div 
+            className="fixed inset-0 z-40" 
+            onClick={() => { setShowAddMenu(false); setShowRemMenu(false); }} 
+          />
+        )}
+
         {/* Left: Classic 4 Silver Buttons */}
-        <div className="flex items-center gap-[2px]">
+        <div className="flex items-center gap-[2px] relative z-50">
           {/* ADD Button */}
           <div className="relative">
             <button 
               id="pl-add-btn"
-              onClick={() => setShowAddMenu(!showAddMenu)}
+              onClick={() => {
+                setShowAddMenu(!showAddMenu);
+                setShowRemMenu(false);
+              }}
               className="h-[15px] px-[5px] winamp-btn-silver font-pixel text-[7px] font-bold flex items-center gap-[1px]"
             >
               ADD
@@ -1427,7 +1438,10 @@ export default function PlaylistEditor({
           <div className="relative">
             <button 
               id="pl-rem-btn"
-              onClick={() => setShowRemMenu(!showRemMenu)}
+              onClick={() => {
+                setShowRemMenu(!showRemMenu);
+                setShowAddMenu(false);
+              }}
               className="h-[15px] px-[5px] winamp-btn-silver font-pixel text-[7px] font-bold flex items-center gap-[1px]"
             >
               REM
@@ -1461,6 +1475,8 @@ export default function PlaylistEditor({
           <button 
             id="pl-sel-btn"
             onClick={() => {
+              setShowAddMenu(false);
+              setShowRemMenu(false);
               const targetIdx = selectedTrackIndex !== undefined ? selectedTrackIndex : currentTrackIndex;
               if (targetIdx >= 0 && targetIdx < tracks.length) {
                 if (onPlayTrack) onPlayTrack(targetIdx);
@@ -1475,7 +1491,11 @@ export default function PlaylistEditor({
           {/* MISC Button */}
           <button 
             id="pl-misc-btn"
-            onClick={() => setShowConfig(!showConfig)}
+            onClick={() => {
+              setShowAddMenu(false);
+              setShowRemMenu(false);
+              setShowConfig(!showConfig);
+            }}
             className="h-[15px] px-[5px] winamp-btn-silver font-pixel text-[7px] font-bold"
           >
             MISC

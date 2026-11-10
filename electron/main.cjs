@@ -163,16 +163,18 @@ async function createWindow() {
   }
 
   mainWindow = new BrowserWindow({
-    width: 564,
-    height: 472,
+    width: 580,
+    height: 520,
     useContentSize: true,
     resizable: true,
-    minWidth: 283,
-    minHeight: 126,
+    minWidth: 275,
+    minHeight: 116,
     title: 'Winamp',
     frame: false,
+    transparent: true,
+    backgroundColor: '#00000000',
     autoHideMenuBar: true,
-    backgroundColor: '#18191d',
+    hasShadow: false,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,

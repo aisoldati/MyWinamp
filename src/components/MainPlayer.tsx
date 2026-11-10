@@ -16,6 +16,7 @@ interface MainPlayerProps {
   isEqOpen: boolean;
   isPlOpen: boolean;
   isVideoOpen: boolean;
+  isDoubleSize?: boolean;
   onPlay: () => void;
   onPause: () => void;
   onStop: () => void;
@@ -29,6 +30,7 @@ interface MainPlayerProps {
   onToggleEq: () => void;
   onTogglePl: () => void;
   onToggleVideo: () => void;
+  onToggleDoubleSize?: () => void;
   onEject: () => void;
   onSkinChange: (skin: WinampSkin) => void;
 }
@@ -67,6 +69,7 @@ export default function MainPlayer({
   isEqOpen,
   isPlOpen,
   isVideoOpen,
+  isDoubleSize,
   onPlay,
   onPause,
   onStop,
@@ -80,6 +83,7 @@ export default function MainPlayer({
   onToggleEq,
   onTogglePl,
   onToggleVideo,
+  onToggleDoubleSize,
   onEject,
   onSkinChange,
 }: MainPlayerProps) {
@@ -366,6 +370,16 @@ export default function MainPlayer({
 
         {/* Right: Window Controls */}
         <div className="flex items-center gap-[2px] z-10">
+          {onToggleDoubleSize && (
+            <button 
+              id="toggle-double-size"
+              onClick={onToggleDoubleSize}
+              title={isDoubleSize ? "Tamaño Normal 1x [Ctrl+D]" : "Doble Tamaño 2x [Ctrl+D]"}
+              className={`w-[11px] h-[9px] text-[6px] font-pixel flex items-center justify-center rounded-[1px] p-0 font-bold ${isDoubleSize ? 'winamp-btn-silver-active text-[#00ff00]' : 'winamp-btn-silver text-gray-800'}`}
+            >
+              2x
+            </button>
+          )}
           <button 
             id="toggle-video-window"
             onClick={onToggleVideo}
@@ -538,7 +552,7 @@ export default function MainPlayer({
       })()}
 
       {/* 3. Seeker / Song Position slider from POSBAR.png */}
-      <div className="h-[10px] flex items-center px-[2px]" title="Seek position">
+      <div className="h-[10px] flex items-center justify-center px-[2px]" title="Seek position">
         <input 
           id="seek-slider"
           type="range"
@@ -547,7 +561,7 @@ export default function MainPlayer({
           value={currentTime}
           onChange={(e) => onSeek(parseFloat(e.target.value))}
           disabled={!currentTrack}
-          className="w-full winamp-slider-posbar"
+          className="w-[248px] winamp-slider-posbar"
         />
       </div>
 
