@@ -112,20 +112,25 @@ function startLocalServer() {
       }
     });
 
-    server.listen(portToUse, () => {
-      console.log(`Production/API server listening on port ${portToUse}`);
-      resolve(portToUse);
-    }).on('error', (err) => {
-      if (err.code === 'EADDRINUSE') {
-        server.listen(0, () => {
-          const port = server.address().port;
-          console.log(`Production/API server listening on random port ${port}`);
-          resolve(port);
-        });
-      } else {
-        reject(err);
-      }
-    });
+    const tryListen = (retries = 8) => {
+      server.listen(portToUse, '127.0.0.1', () => {
+        console.log(`Production/API server listening on 127.0.0.1:${portToUse}`);
+        resolve(portToUse);
+      }).on('error', (err) => {
+        server.removeAllListeners('error');
+        if (err.code === 'EADDRINUSE' && retries > 0) {
+          console.log(`Port ${portToUse} in TimeWait, retrying in 400ms...`);
+          setTimeout(() => tryListen(retries - 1), 400);
+        } else {
+          server.listen(0, '127.0.0.1', () => {
+            const port = server.address().port;
+            console.log(`Production/API server listening on random port ${port}`);
+            resolve(port);
+          });
+        }
+      });
+    };
+    tryListen();
   });
 }
 
